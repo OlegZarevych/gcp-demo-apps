@@ -17,6 +17,12 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/hello-world-flask']
 
+  # Step 3: Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args: ['run', 'deploy', 'hello-world-flask', '--image', 'gcr.io/PROJECT_ID/hello-world-flask', '--region', 'europe-west1']
+
+
 images:
   - 'gcr.io/$PROJECT_ID/hello-world-flask'
 
