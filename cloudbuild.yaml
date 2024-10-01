@@ -1,5 +1,3 @@
-substitutions:
-  _MY_VAR: 'world!'
 
 steps:
   # - name: 'gcr.io/cloud-builders/pip'
@@ -7,7 +5,8 @@ steps:
   - name: 'bash'
     script: |
       #!/usr/bin/env bash
-      echo "Hello ${_MY_VAR}"
+      echo 'Hello $_MY_VAR This is build $BUILD_ID'
+    
   # Step 1: Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'gcr.io/$PROJECT_ID/hello-world-flask', '.']
@@ -20,7 +19,7 @@ steps:
   # Step 3: Deploy to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
-    args: ['run', 'deploy', 'hello-world-flask', '--image', 'gcr.io/PROJECT_ID/hello-world-flask', '--region', 'europe-west1']
+    args: ['run', 'deploy', 'hello-world-flask', '--image', 'gcr.io/$PROJECT_ID/hello-world-flask', '--region', 'europe-west1']
 
 
 images:
@@ -28,3 +27,7 @@ images:
 
 options:
   logging: 'CLOUD_LOGGING_ONLY'
+  automapSubstitutions: true #  To automatically map all the substitutions to environment variables, which will be available throughout the entire build, set automapSubstitutions to true as an option at the build level. For example, the following build config file shows the user-defined substitution $_USER and the default substitution $PROJECT_ID mapped to environment variables:
+
+substitutions:
+  _MY_VAR: 'world!'
