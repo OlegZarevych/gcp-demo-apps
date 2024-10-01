@@ -1,0 +1,18 @@
+steps:
+  # - name: 'gcr.io/cloud-builders/pip'
+  #   args: ['install', '-r', 'requirements.txt']
+  - name: 'gcr.io/cloud-builders/bash'
+    args: ['echo', 'Hello, $MY_VAR']
+    env:
+    - 'MY_VAR=world!'
+  # Step 1: Build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/hello-world-flask', '.']
+    id: build-docker
+
+  # Step 2: Push the Docker image to GCR
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/hello-world-flask']
+
+images:
+  - 'gcr.io/$PROJECT_ID/hello-world-flask'
